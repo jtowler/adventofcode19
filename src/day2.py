@@ -1,5 +1,3 @@
-import math
-
 from src.utils import get_input_data
 
 
