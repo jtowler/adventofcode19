@@ -35,3 +35,12 @@ class TestIntcode(TestCase):
         ic = Intcode([3, 0, 4, 0, 99], 100)
         ic.run_program()
         assert ic.output == [100]
+
+    def test_jump(self):
+        ic = Intcode([3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8], 8)
+        ic.run_program()
+        assert ic.output == [100]
+
+        ic = Intcode([3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8], 8)
+        ic.run_program()
+        assert ic.output == [100]

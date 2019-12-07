@@ -50,6 +50,24 @@ class Intcode(object):
         elif t == 4:
             self._add_to_output(self.pointer + 1)
             self._increment_pointer(2)
+        elif t == 5:
+            if self._get_value(self.pointer + 1, 1):
+                self.pointer = self._get_value(self.pointer + 2, 1)
+            else:
+                self._increment_pointer(3)
+        elif t == 6:
+            if not self._get_value(self.pointer + 1, 1):
+                self.pointer = self._get_value(self.pointer + 2, 1)
+            else:
+                self._increment_pointer(3)
+        elif t == 7:
+            v = self._get_value(self.pointer + 1) < self._get_value(self.pointer + 2)
+            third = self._get_value(self.pointer + 3, 1)
+            self._set_value(third, int(v))
+        elif t == 8:
+            v = self._get_value(self.pointer + 1) == self._get_value(self.pointer + 2)
+            third = self._get_value(self.pointer + 3)
+            self._set_value(third, int(v))
         elif t > 4:
             self._advanced_step()
         else:
