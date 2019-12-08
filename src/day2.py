@@ -1,31 +1,13 @@
+from src.day5 import Intcode
 from src.utils import get_input_data
-
-
-def run_program(program):
-    i = 0
-    seq = program[i:i + 4]
-    while seq[0] != 99:
-        program = run_step(program, seq)
-        i += 4
-        seq = program[i:i + 4]
-    return program
-
-
-def run_step(program, seq):
-    t, in1, in2, out = seq
-    if t == 1:
-        program[out] = program[in1] + program[in2]
-    elif t == 2:
-        program[out] = program[in1] * program[in2]
-    else:
-        raise ValueError(f"Unknown instruction type: {t}")
-    return program
 
 
 def run_noun_verb(noun, verb, program):
     program[1] = noun
     program[2] = verb
-    return run_program(program)
+    ic = Intcode(program)
+    ic.run_program()
+    return ic.program
 
 
 def check_noun_verb(program, val):
