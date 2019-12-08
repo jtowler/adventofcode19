@@ -18,8 +18,8 @@ class Intcode(object):
         else:
             return self.program[p]
 
-    def _add_to_output(self, i: int) -> None:
-        self.output.append(self._get_value(i))
+    def _add_to_output(self, i: int, immediate: int = None) -> None:
+        self.output.append(self._get_value(i, immediate))
 
     def _set_value(self, i: int, value: int) -> None:
         self.program[i] = value
@@ -34,89 +34,68 @@ class Intcode(object):
         while self._get_type() != 99:
             self._run_step()
 
+    def _parse_type(self):
+        t = self._get_value(self.pointer, 1)
+        if t < 100:
+            return t, 0, 0
+        else:
+            s = str(t)
+            nt = int(s[-2:])
+            s = s[:-2][::-1]
+            p1 = int(s[0]) if len(s) > 0 else 0
+            p2 = int(s[1]) if len(s) > 1 else 0
+            return nt, p1, p2
+
     def _run_step(self) -> None:
-        t = self._get_type()
+        t, p1, p2 = self._parse_type()
         if t == 1:
             self._set_value(self._get_value(self.pointer + 3, 1),
-                            self._get_value(self.pointer + 1) + self._get_value(self.pointer + 2))
+                            self._get_value(self.pointer + 1, p1) + self._get_value(self.pointer + 2, p2))
             self._increment_pointer(4)
         elif t == 2:
             self._set_value(self._get_value(self.pointer + 3, 1),
-                            self._get_value(self.pointer + 1) * self._get_value(self.pointer + 2))
+                            self._get_value(self.pointer + 1, p1) * self._get_value(self.pointer + 2, p2))
             self._increment_pointer(4)
         elif t == 3:
             self._set_value(self._get_value(self.pointer + 1, 1), self.input_val)
             self._increment_pointer(2)
         elif t == 4:
-            self._add_to_output(self.pointer + 1)
+            self._add_to_output(self.pointer + 1, p1)
             self._increment_pointer(2)
         elif t == 5:
-            if self._get_value(self.pointer + 1, 1):
-                self.pointer = self._get_value(self.pointer + 2, 1)
+            if self._get_value(self.pointer + 1, p1):
+                self.pointer = self._get_value(self.pointer + 2, p2)
             else:
                 self._increment_pointer(3)
         elif t == 6:
-            if not self._get_value(self.pointer + 1, 1):
-                self.pointer = self._get_value(self.pointer + 2, 1)
+            if not self._get_value(self.pointer + 1, p1):
+                self.pointer = self._get_value(self.pointer + 2, p2)
             else:
                 self._increment_pointer(3)
         elif t == 7:
-            v = self._get_value(self.pointer + 1) < self._get_value(self.pointer + 2)
+            v = self._get_value(self.pointer + 1, p1) < self._get_value(self.pointer + 2, p2)
             third = self._get_value(self.pointer + 3, 1)
             self._set_value(third, int(v))
+            self._increment_pointer(4)
         elif t == 8:
-            v = self._get_value(self.pointer + 1) == self._get_value(self.pointer + 2)
-            third = self._get_value(self.pointer + 3)
+            v = self._get_value(self.pointer + 1, p1) == self._get_value(self.pointer + 2, p2)
+            third = self._get_value(self.pointer + 3, 1)
             self._set_value(third, int(v))
-        elif t > 4:
-            self._advanced_step()
+            self._increment_pointer(4)
         else:
             raise ValueError(f"Unknown instruction type {t}.")
-
-    def _advanced_step(self):
-
-        s = str(self._get_type())
-        t = int(s[-2:])
-        s = s[:-2][::-1]
-
-        def get_mode_value(i):
-            try:
-                return self._get_value(self.pointer + i + 1, int(s[i]))
-            except IndexError:
-                return self._get_value(self.pointer + i + 1)
-
-        i1 = get_mode_value(0)
-        if t == 4:
-            self.output.append(i1)
-            self._increment_pointer(2)
-            return
-        i2 = get_mode_value(1)
-        o = self._get_value(self.pointer + 3, 1)
-        if t == 1:
-            self._set_value(o, i1 + i2)
-            self._increment_pointer(4)
-        elif t == 2:
-            self._set_value(o, i1 * i2)
-            self._increment_pointer(4)
-        elif t == 3:
-            self._set_value(o, self.input_val)
-            self._increment_pointer(2)
-
-        else:
-            raise ValueError(f"Unknown instruction type: {t}")
 
 
 if __name__ == "__main__":
     input_data = get_input_data("input5.txt")
     data = [int(i) for i in input_data[0]]
-    # answer1 = run_noun_verb(12, 2, data.copy())[0]
-    # answer2 = check_noun_verb(data, 19690720)
-    #
-    # print(answer1)
-    # print(answer2)
-    # data = [1101,100,-1,4,0]
-    # run_program(data, 1)
-    ic = Intcode(data, input_val=1)
+
+    ic = Intcode(data.copy(), input_val=1)
     ic.run_program()
     answer1 = ic.output[-1]
     print(answer1)
+
+    ic = Intcode(data.copy(), input_val=5)
+    ic.run_program()
+    answer2 = ic.output[0]
+    print(answer2)
