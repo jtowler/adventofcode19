@@ -1,8 +1,17 @@
-from collections import OrderedDict
+from functools import reduce
+from math import gcd
 from typing import List, Dict
 
 from src.utils import _RESOURCE_LOC
 import re
+
+
+def lcm(a, b):
+    return int(a * b / gcd(a, b))
+
+
+def lcms(*numbers):
+    return reduce(lcm, numbers)
 
 
 def planet_from_str(s: str) -> 'Planet':
@@ -55,38 +64,38 @@ class Planet(object):
         return pot * kin
 
 
-def run_sim(moons: List['Planet'], steps: int) -> List['Planet']:
+def run_sim(moons: List['Planet'], steps: int):
 
     count = 0
-
+    xs = []
+    ys = []
+    zs = []
     while count < steps:
         n_moons = [moon.copy() for moon in moons]
+        xs.append(n_moons[2].x)
+        ys.append(n_moons[2].y)
+        zs.append(n_moons[2].z)
         for i in moons:
             i.update(n_moons)
         count += 1
 
-    return moons
+    return moons, lcms(find_cycle(xs), find_cycle(ys), find_cycle(zs))
 
 
-def run_sim_until_equal(moons: List['Planet']) -> int:
-    count = 0
-    all_moons = []
-    moons = run_sim(moons, 1)
-    while moons not in all_moons:
-        all_moons.append([moon.copy() for moon in moons])
-        n_moons = [moon.copy() for moon in moons]
-        for i in moons:
-            i.update(n_moons)
-        count += 1
-    return count
+def find_cycle(l):
+    inds = [i for i in range(len(l)) if l[i] == l[0]][1:]
+    for ind in inds:
+        if l[:ind] == l[ind: ind * 2]:
+            return ind
+    else:
+        raise ValueError
 
 
 if __name__ == "__main__":
     with open(f"{_RESOURCE_LOC}/input12.txt") as f:
         planets = [planet_from_str(i) for i in f.readlines()]
 
-    new_planets = run_sim(planets, 1000)
+    new_planets, answer2 = run_sim(planets, 1000000)
     answer1 = sum([m.get_energy() for m in new_planets])
     print(answer1)
-    answer2 = run_sim_until_equal(planets)
     print(answer2)
