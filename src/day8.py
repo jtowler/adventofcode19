@@ -3,7 +3,7 @@ from typing import List
 from src.utils import get_input_data
 
 
-class SIF(object):
+class SIF:
 
     def __init__(self, data: List[int], width: int, height: int) -> None:
         self.layer_size = width * height
