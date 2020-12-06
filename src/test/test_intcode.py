@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.day5 import Intcode
+from src.advent19.day5 import Intcode
 
 
 class TestIntcode(TestCase):

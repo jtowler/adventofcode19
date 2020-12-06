@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.day7 import phase_setting
+from src.advent19.day7 import phase_setting
 
 
 class TestIntcode(TestCase):

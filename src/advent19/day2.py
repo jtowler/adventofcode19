@@ -1,4 +1,4 @@
-from src.day5 import Intcode
+from src.advent19.day5 import Intcode
 from src.utils import get_input_data
 
 
