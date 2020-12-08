@@ -32,7 +32,7 @@ def get_shortest_between_orbits(l: List[Orbiter]) -> int:
 
 
 if __name__ == "__main__":
-    input_data = get_input_data("input6.txt")
+    input_data = get_input_data("advent19/input6.txt")
     data = [Orbiter(i[0]) for i in input_data]
     answer1 = sum([i.count_orbiting(data) for i in data])
     answer2 = get_shortest_between_orbits(data)

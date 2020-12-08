@@ -48,7 +48,7 @@ class SIF:
 
 
 if __name__ == "__main__":
-    input_data = [int(i) for i in get_input_data("input8.txt")[0][0]]
+    input_data = [int(i) for i in get_input_data("advent19/input8.txt")[0][0]]
 
     assert SIF([1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2], 3, 2).layers[1] == [[7, 8, 9], [0, 1, 2]]
     assert SIF([0, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 2, 0, 0, 0, 0], 2, 2).image == [[0, 1], [1, 0]]

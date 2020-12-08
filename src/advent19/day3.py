@@ -57,7 +57,7 @@ def determine_timing(l1, l2):
 
 
 if __name__ == "__main__":
-    input_data = get_input_data("input3.txt")
+    input_data = get_input_data("advent19/input3.txt")
     w1 = [i for i in input_data[0]]
     w2 = [i for i in input_data[1]]
 

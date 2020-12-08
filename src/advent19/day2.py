@@ -21,7 +21,7 @@ def check_noun_verb(program, val):
 
 
 if __name__ == "__main__":
-    input_data = get_input_data("input2.txt")
+    input_data = get_input_data("advent19/input2.txt")
     data = [int(i) for i in input_data[0]]
     answer1 = run_noun_verb(12, 2, data.copy())[0]
     answer2 = check_noun_verb(data, 19690720)

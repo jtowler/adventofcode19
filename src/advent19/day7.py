@@ -43,7 +43,7 @@ def get_max_setting(data: List[int]) -> int:
 
 
 if __name__ == "__main__":
-    input_data = get_input_data("input7.txt")
+    input_data = get_input_data("advent19/input7.txt")
     data = [int(i) for i in input_data[0]]
     # answer1 = get_max_setting(data)
     # print(answer1)
@@ -54,6 +54,3 @@ if __name__ == "__main__":
                                -5, 54, 1105, 1, 12, 1, 53, 54, 53, 1008, 54, 0, 55, 1001, 55, 1, 55, 2, 53, 55, 53, 4,
                                53, 1001, 56, -1, 56, 1005, 56, 6, 99, 0, 0, 0, 0, 10], [9, 7, 8, 5, 6])
     print(answer3)
-
-18216
-139629729

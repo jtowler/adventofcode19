@@ -102,7 +102,7 @@ class Intcode:
 
 
 if __name__ == "__main__":
-    input_data = get_input_data("input5.txt")
+    input_data = get_input_data("advent19/input5.txt")
     data = [int(i) for i in input_data[0]]
 
     ic = Intcode(data.copy(), input_val=1)

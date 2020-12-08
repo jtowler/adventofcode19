@@ -16,7 +16,7 @@ def calc_fuel_for_fuel(mass):
 
 
 if __name__ == "__main__":
-    input_data = get_input_data("input1.txt")
+    input_data = get_input_data("advent19/input1.txt")
     data = [int(i[0]) for i in input_data]
     fuel = list(map(calc_fuel, data))
 

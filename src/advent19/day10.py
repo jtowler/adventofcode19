@@ -60,7 +60,7 @@ def vaporise(field: List[Asteroid], asteroid: Asteroid, n: int = 200):
 
 
 if __name__ == "__main__":
-    input_data = [list(i[0]) for i in get_input_data("input10.txt")]
+    input_data = [list(i[0]) for i in get_input_data("advent19/input10.txt")]
     asteroids = [Asteroid(x, y) for y in range(len(input_data)) for x in range(len(input_data[0]))
                  if input_data[y][x] == '#']
     asteroids[1].count_visible(asteroids)

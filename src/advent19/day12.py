@@ -92,7 +92,7 @@ def find_cycle(l):
 
 
 if __name__ == "__main__":
-    with open(f"{_RESOURCE_LOC}/input12.txt") as f:
+    with open(f"{_RESOURCE_LOC}advent19/input12.txt") as f:
         planets = [planet_from_str(i) for i in f.readlines()]
 
     new_planets, answer2 = run_sim(planets, 1000000)
