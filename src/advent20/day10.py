@@ -1,16 +1,10 @@
 from functools import reduce
 from typing import List
 
-test = [16, 10, 15, 5, 1, 11, 7, 19, 6, 12, 4]
-
 
 def part1(data):
     diffs = [i - j for i, j in zip(data + [data[-1] + 3], [0] + data)]
     return diffs.count(1) * diffs.count(3)
-
-
-def diff_indices(data, diffs, n):
-    return [data[i] for i in range(len(diffs)) if diffs[i] == n]
 
 
 def part2(sorted_adapters: List[int]) -> int:
