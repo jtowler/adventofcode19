@@ -25,9 +25,6 @@ class Ship:
         if direction == 'S':
             self.north -= amount
 
-    def manhattan(self) -> int:
-        return abs(self.east) + abs(self.north)
-
     def change_bearing(self, direction: str, amount: int) -> None:
         bearing_index = bearings.index(self.bearing)
         bearing_inc = int(amount / 90)
@@ -40,8 +37,8 @@ class Ship:
 class WaypointShip:
     wp_east = 10
     wp_north = 1
-    ship_east = 0
-    ship_north = 0
+    east = 0
+    north = 0
 
     def read_instruction(self, instruction: str) -> None:
         d, n = instruction[0], int(instruction[1:])
@@ -67,8 +64,8 @@ class WaypointShip:
             self.wp_east, self.wp_north = -self.wp_north, self.wp_east
 
     def move(self, amount: int) -> None:
-        self.ship_east += amount * self.wp_east
-        self.ship_north += amount * self.wp_north
+        self.east += amount * self.wp_east
+        self.north += amount * self.wp_north
 
     def move_waypoint(self, direction: str, amount: int):
         if direction == 'E':
@@ -80,8 +77,9 @@ class WaypointShip:
         if direction == 'S':
             self.wp_north -= amount
 
-    def manhattan(self) -> int:
-        return abs(self.ship_east) + abs(self.ship_north)
+
+def manhattan(ship):
+    return abs(ship.east) + abs(ship.north)
 
 
 if __name__ == '__main__':
@@ -91,5 +89,5 @@ if __name__ == '__main__':
     for ins in instructions:
         ship1.read_instruction(ins)
         ship2.read_instruction(ins)
-    print(ship1.manhattan())  # 962
-    print(ship2.manhattan())  # 56135
+    print(manhattan(ship1))  # 962
+    print(manhattan(ship2))  # 56135
