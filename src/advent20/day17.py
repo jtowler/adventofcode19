@@ -2,15 +2,14 @@ import itertools
 
 
 def pad_cube(data, n=6, hc=False):
+    def expand(dt):
+        l_y = [[dt[0]] * len(dt)] * int((len(dt) - 1) / 2)
+        return l_y + [dt] + l_y
+
     data = ['.' * n + d + '.' * n for d in data]
     l_x = ['.' * len(data[0])] * n
-    data = l_x + data + l_x
-    l_y = [[data[0]] * len(data)] * int((len(data) - 1) / 2)
-    data = l_y + [data] + l_y
-    if hc:
-        l_z = [[data[0]] * len(data)] * int((len(data) - 1) / 2)
-        return l_z + [data] + l_z
-    return data
+    data = expand(l_x + data + l_x)
+    return expand(data) if hc else data
 
 
 def count_cubes(data, hc=False):
@@ -20,34 +19,18 @@ def count_cubes(data, hc=False):
 
 
 def cycle_cube(data):
-    new_data = []
-    for z, slce in enumerate(data):
-        new_slice = []
-        for y, line in enumerate(slce):
-            new_line = ''
-            for x, cube in enumerate(line):
-                n = get_neighbours(data, z, y, x)
-                new_line += new_character(n, cube)
-            new_slice.append(new_line)
-        new_data.append(new_slice)
-    return new_data
+    return [[''.join([new_character(get_neighbours(data, z, y, x), cube)
+                      for x, cube in enumerate(line)])
+             for y, line in enumerate(slce)]
+            for z, slce in enumerate(data)]
 
 
 def cycle_hyper_cube(data):
-    new_data = []
-    for w, in_cube in enumerate(data):
-        new_in_cube = []
-        for z, slce in enumerate(in_cube):
-            new_slice = []
-            for y, line in enumerate(slce):
-                new_line = ''
-                for x, cube in enumerate(line):
-                    n = get_neighbours_hc(data, w, z, y, x)
-                    new_line += new_character(n, cube)
-                new_slice.append(new_line)
-            new_in_cube.append(new_slice)
-        new_data.append(new_in_cube)
-    return new_data
+    return [[[''.join([new_character(get_neighbours_hc(data, w, z, y, x), cube)
+                       for x, cube in enumerate(line)])
+              for y, line in enumerate(slce)]
+             for z, slce in enumerate(in_cube)]
+            for w, in_cube in enumerate(data)]
 
 
 def new_character(n, cube):
@@ -59,7 +42,7 @@ def new_character(n, cube):
 def get_neighbours(data, z, y, x):
     nbrs = 0
     for ix, iy, iz in itertools.product([0, -1, 1], [0, -1, 1], [0, -1, 1]):
-        if not ((ix == 0) and (iy == 0) and (iz == 0)):
+        if not (ix, iy, iz).count(0) == 3:
             nx, ny, nz = x + ix, y + iy, z + iz
             if (len(data) > nx >= 0) and (len(data) > ny >= 0) and (len(data) > nz >= 0):
                 if data[nz][ny][nx] == '#':
@@ -70,7 +53,7 @@ def get_neighbours(data, z, y, x):
 def get_neighbours_hc(data, w, z, y, x):
     nbrs = 0
     for ix, iy, iz, iw in itertools.product([0, -1, 1], [0, -1, 1], [0, -1, 1], [0, -1, 1]):
-        if not ((ix == 0) and (iy == 0) and (iz == 0) and (iw == 0)):
+        if not (ix, iy, iz, iw).count(0) == 4:
             nx, ny, nz, nw = x + ix, y + iy, z + iz, w + iw
             if (len(data) > nx >= 0) and (len(data) > ny >= 0) and \
                     (len(data) > nz >= 0) and (len(data) > nw >= 0):
@@ -90,6 +73,6 @@ def part(data, n, hc):
 if __name__ == '__main__':
     input_data = open("../../resources/advent20/input17.txt", "r").read().split("\n")
     answer1 = part(input_data, 6, False)
-    answer2 = part(input_data, 6, True)
     print(answer1)  # 112
+    answer2 = part(input_data, 6, True)
     print(answer2)  # 848
